@@ -1,0 +1,179 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+export const productApi = createApi({
+  reducerPath: 'productApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api/products' }),
+  endpoints: (builder) => ({
+    getProducts: builder.query({
+      query: () => '/',
+    }),
+    getProduct: builder.query({
+      query: (id) => `/${id}`,
+    }),
+  }),
+})
+
+export const authApi = createApi({
+  reducerPath: 'authApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3000/api/auth',
+    credentials: 'include',
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth?.signup?.idToken || localStorage.getItem('idToken');
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      headers.set('Content-Type', 'application/json');
+      return headers;
+    },
+  }),
+  tagTypes: ['Auth'],
+  endpoints: (build) => ({
+    createUser: build.mutation({
+      query: (formattedPhone) => ({
+        url: '/signup',
+        method: 'POST',
+        body: formattedPhone,
+      }),
+      transformResponse: (response: { data: User }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
+      invalidatesTags: ['Auth']
+    }),
+    verifyOtp: build.mutation({
+      query: (body) => ({
+        url: '/verify-signup',
+        method: 'POST',
+        body
+      }),
+      transformResponse: (response: { data: User }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
+      invalidatesTags: ['Auth']
+    }),
+    login: build.mutation({
+      query: (formattedPhone) => ({
+        url: '/login',
+        method: 'POST',
+        body: formattedPhone
+      }),
+      transformResponse: (response: { data: User }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
+      invalidatesTags: ['Auth']
+    }),
+    verifyLogin: build.mutation({
+      query: (body) => ({
+        url: '/verify-login',
+        method: 'POST',
+        body
+      }),
+      transformResponse: (response: { data: User }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
+      invalidatesTags: ['Auth']
+    }),
+    getUser: build.query<User, void>({
+      query: () => '/user',
+    }),
+    userLogout: build.mutation<User, void>({
+      query: () => ({
+        url: '/logout',
+        method: 'POST',
+      }),
+    })
+  }),
+})
+
+export const cartApi = createApi({
+  reducerPath: 'cartApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3000/api/cart',
+    credentials: 'include',
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth?.signup?.idToken || localStorage.getItem('idToken');
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      headers.set('Content-Type', 'application/json');
+      return headers;
+    },
+  }),
+  tagTypes: ['Cart'],
+  endpoints: (builder) => ({
+    getCart: builder.query({
+      query: () => '/',
+      providesTags: ['Cart']
+    }),
+    addToCart: builder.mutation({
+      query: (body) => ({
+        url: '/add',
+        method: 'POST',
+        body
+      }),
+      transformResponse: (response: { data: User }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
+      invalidatesTags: ['Cart']
+    }),
+    removeFromCart: builder.mutation({
+      query: (id) => ({
+        url: '/remove',
+        method: 'POST',
+        body: {id}
+      }),
+      transformResponse: (response: { data: User }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
+      invalidatesTags: ['Cart']
+    }),
+    increaseItemQuantity: builder.mutation({
+      query: (id) => ({
+        url: '/increment',
+        method: 'POST',
+        body: {itemId: { id }}
+      }),
+      transformResponse: (response: { data: User }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
+      invalidatesTags: ['Cart'],
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          cartApi.util.updateQueryData('getCart', undefined, (draft) => {
+            const item = draft.products.find((p) => p._id === id);
+            if(item){
+              item.selectedQuantity += 1;
+            }
+          })
+        )
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
+    decreaseItemQuantity: builder.mutation({
+      query: (id) => ({
+        url: '/decrement',
+        method: 'POST',
+        body: {itemId: { id }}
+      }),
+      transformResponse: (response: { data: User }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
+      invalidatesTags: ['Cart'],
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          cartApi.util.updateQueryData('getCart', undefined, (draft) => {
+            const item = draft.products.find((p) => p._id === id);
+            if(item){
+              item.selectedQuantity -= 1;
+            }
+          })
+        )
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      }
+    })
+  }),
+})
+
+export const { useGetProductsQuery, useGetProductQuery } = productApi
+export const { useCreateUserMutation, useVerifyOtpMutation, useGetUserQuery, useLoginMutation, useVerifyLoginMutation, useUserLogoutMutation } = authApi
+export const { useGetCartQuery, useAddToCartMutation, useRemoveFromCartMutation, useIncreaseItemQuantityMutation, useDecreaseItemQuantityMutation } = cartApi

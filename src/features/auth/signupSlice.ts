@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isSendingOtp: false,
   isVerifyingOtp: false,
-	isUserLoggedIn: false
+	isUserLoggedIn: false,
+	idToken: undefined
 };
 
 const signupSlice = createSlice({

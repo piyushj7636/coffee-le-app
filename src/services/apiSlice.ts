@@ -1,10 +1,47 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import type { RootState } from '../app/store';
+
+type User = {
+  phone: number,
+  phoneVerified: boolean,
+  phoneOTP: string,
+  name: string
+}
+
+type Product = {
+  _id: string;
+  name: string;
+  price: number;
+  imageId: string;
+};
+
+type CartItem = {
+  productId: Product;
+  selectedQuantity: number;
+  selectedSize: string;
+  _id: string;
+}
+
+type CartResponse = {
+  products: Array<CartItem>
+}
+
+interface MenuItem {
+  name: string;
+  description: string;
+  price: number;
+  rating: number;
+  time: string;
+  id: number;
+  imageId: string;
+	category: string;
+}
 
 export const productApi = createApi({
   reducerPath: 'productApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api/products' }),
   endpoints: (builder) => ({
-    getProducts: builder.query({
+    getProducts: builder.query<Array<MenuItem>, void>({
       query: () => '/',
     }),
     getProduct: builder.query({
@@ -19,7 +56,7 @@ export const authApi = createApi({
     baseUrl: 'http://localhost:3000/api/auth',
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-      const token = getState().auth?.signup?.idToken || localStorage.getItem('idToken');
+      const token = (getState() as RootState).auth?.signup?.idToken || localStorage.getItem('idToken');
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -87,7 +124,7 @@ export const cartApi = createApi({
     baseUrl: 'http://localhost:3000/api/cart',
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-      const token = getState().auth?.signup?.idToken || localStorage.getItem('idToken');
+      const token = (getState() as RootState).auth?.signup?.idToken || localStorage.getItem('idToken');
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -97,7 +134,7 @@ export const cartApi = createApi({
   }),
   tagTypes: ['Cart'],
   endpoints: (builder) => ({
-    getCart: builder.query({
+    getCart: builder.query<CartResponse, void>({
       query: () => '/',
       providesTags: ['Cart']
     }),

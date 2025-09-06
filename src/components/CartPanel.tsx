@@ -1,114 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDecreaseItemQuantityMutation, useGetCartQuery, useIncreaseItemQuantityMutation, useRemoveFromCartMutation } from '../services/apiSlice';
+import { Minus, Plus } from "lucide-react";
 
-// interface CartItem {
-//   id: string;
-//   name: string;
-//   price: number;
-//   quantity: number;
-// }
+type Product = {
+  _id: string;
+  name: string;
+  price: number;
+  imageId: string;
+};
 
-// interface CartPanelProps {
-//   items: CartItem[];
-//   onCheckout: (cart: CartItem[]) => void;
-// }
+type CartItem = {
+  productId: Product;
+  selectedQuantity: number;
+  selectedSize: string;
+  _id: string;
+}
 
-// export const CartPanel: React.FC<CartPanelProps> = () => {
-//   // const [cartItems, setCartItems] = useState(items)
-  // const {data, isLoading} = useGetCartQuery()
-  // const [removeFromCart] = useRemoveFromCartMutation()
-//   // console.log(data)
-
-//   // const total = cartItems?.reduce(
-//   //   (sum, item) => sum + item.price * item.quantity,
-//   //   0
-//   // );
-
-//   const handleRemoveItem = async (id) => {
-//     await removeFromCart(id)
-//   }
-
-//   return (
-//     <div className="bg-gray-900 text-white rounded-xl shadow-lg p-6 w-full max-w-3xl mx-auto">
-//       <h2 className="text-2xl font-semibold mb-6">Your Cart</h2>
-//       <div className="space-y-4 mb-6">
-//         {data?.products.map(item => (
-//           <div
-//             key={item.productId._id}
-//             className="flex justify-between items-center border-b border-gray-700 pb-2"
-//           >
-//             <div className="flex flex-col">
-//               <span className="text-lg font-medium">{item.productId.name}</span>
-//               <span className="text-sm text-gray-400">${((item.productId.price)/100).toFixed(2)}</span>
-//             </div>
-//             <div className="flex items-center gap-2">
-//               <button
-//                 // onClick={() => updateQuantity(item.id, -1)}
-//                 className="px-2 bg-gray-800 rounded-full hover:bg-gray-700"
-//               >
-//                 −
-//               </button>
-//               <span>{item.quantity}</span>
-//               <button
-//                 // onClick={() => updateQuantity(item.id, 1)}
-//                 className="px-2 bg-gray-800 rounded-full hover:bg-gray-700"
-//               >
-//                 +
-//               </button>
-//             </div>
-//             <div>
-//               <button
-//                 onClick={() => handleRemoveItem(item.productId._id)}
-//                 className='w-full bg-yellow-300 hover:bg-yellow-400 transition-all font-semibold p-2 rounded-lg text-black'>Remove</button>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//       <div className="flex justify-between text-lg font-bold mb-4">
-//         <span>Total</span>
-//         {/* <span>${total.toFixed(2)}</span> */}
-//       </div>
-//       <button
-//         className="w-full bg-purple-600 hover:bg-purple-700 transition-all font-semibold p-3 rounded-lg"
-//         // onClick={() => onCheckout(cartItems)}
-//       >
-//         Proceed to Checkout
-//       </button>
-//     </div>
-//   );
-// };
-
-import { X, Minus, Plus } from "lucide-react";
-
-export const CartPanel = () => {
+export const CartPanel: React.FC = () => {
   const [payment, setPayment] = useState(false)
-  const [quantity, setQuantity] = useState(null)
   const {data, isLoading} = useGetCartQuery()
   const [removeFromCart] = useRemoveFromCartMutation()
   const [increaseCartQuantity] = useIncreaseItemQuantityMutation()
   const [decreaseCartQuantity] = useDecreaseItemQuantityMutation()
-  const subtotal = data?.products.reduce((acc, item) => acc + (item.productId.price * item.selectedQuantity), 0);
+  const subtotal = data?.products.reduce((acc, item) => acc + (item.productId.price * item.selectedQuantity), 0) || 0;
   const deliveryFee = 3500;
   const taxes = 2000;
   const total = subtotal + deliveryFee + taxes;
 
-  const handleRemoveItem = async (id) => {
+  const handleRemoveItem = async (id: string) => {
     await removeFromCart(id)
   }
 
-  const handleIncreaseQuantity = async (item) => {
-    setQuantity(item.selectedQuantity + 1)
+  const handleIncreaseQuantity = async (item: CartItem) => {
     const id = item?._id
     await increaseCartQuantity(id).unwrap()
-    // await increaseCartQuantity(item._id).unwrap()
   }
 
-  const handleDecreaseQuantity = async (item) => {
+  const handleDecreaseQuantity = async (item: CartItem) => {
     if(item.selectedQuantity > 1){
-      setQuantity(item.selectedQuantity - 1)
       const id = item?._id
       await decreaseCartQuantity(id).unwrap()
-      // await decreaseCartQuantity(item._id).unwrap()
     }
   }
 
@@ -119,7 +50,9 @@ export const CartPanel = () => {
         <div className="flex-1 bg-gray-900 rounded-xl p-6 shadow-lg space-y-6">
           <h2 className="text-2xl font-bold border-b border-gray-700 pb-2">Your Items</h2>
 
-          {data?.products.length === 0 ? (
+          {isLoading ? (
+            <h1>Loading...</h1>
+          ) : data?.products.length === 0 ? (
             <p className="text-gray-400">Your cart is empty.</p>
           ) : (
             data?.products.map((item) => (

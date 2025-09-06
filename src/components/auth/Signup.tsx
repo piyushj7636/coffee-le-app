@@ -19,12 +19,11 @@ import {
   setIsVerifyingOtp,
   setIsUserLoggedIn
 } from "../../features/auth/signupSlice";
-import type { RootState, AppDispatch } from "../../app/store"; // <-- adjust path for your project
+import type { RootState, AppDispatch } from "../../app/store";
 
 declare global {
   interface Window {
-    recaptchaVerifier?: RecaptchaVerifier;
-    confirmationResult?: any;
+    confirmationResult: import('firebase/auth').ConfirmationResult;
   }
 }
 
@@ -53,7 +52,7 @@ const Signup = () => {
         auth,
         "recaptcha-container",
         { size: "invisible", // or 'normal'
-          callback: (response) => {
+          callback: (response: string) => {
             console.log("reCAPTCHA solved:", response);
           }
         }
@@ -79,7 +78,6 @@ const Signup = () => {
       }
       await setPersistence(auth, browserLocalPersistence);
       const confirmation = await signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier);
-      console.log(confirmation)
       window.confirmationResult = confirmation;
       await createUser({ phone: formattedPhone }).unwrap();
       setStep("verifyOtp")
@@ -191,7 +189,7 @@ const Signup = () => {
                     inputMode="numeric"
                     maxLength={1}
                     value={digit}
-                    ref={(el) => (otpInputs.current[idx] = el)}
+                    ref={(el) => {(otpInputs.current[idx] = el)}}
                     onChange={(e) => handleOtpChange(e, idx)}
                     onKeyDown={(e) => handleOtpKeyDown(e, idx)}
                     className="w-10 sm:w-12 h-12 text-center text-2xl rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"

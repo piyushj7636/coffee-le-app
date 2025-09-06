@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGetProductsQuery } from '../services/apiSlice';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,9 +7,12 @@ interface MenuItem {
   price: number;
   rating: number;
   time: string;
+  id: number;
+  imageId: string;
+  category: string;
 }
 
-const Menu: React.FC<MenuItem> = () => {
+const Menu = () => {
 
   const {data} = useGetProductsQuery(undefined)
   const navigate = useNavigate()
@@ -30,7 +32,7 @@ const Menu: React.FC<MenuItem> = () => {
 
         {/* Menu Grid */}
         <div className="grid gap-8 sm:grid-cols-2">
-          {data && data.map((item, idx: number) => (
+          {data && data.map((item: MenuItem, idx: number) => (
             <div
               key={idx}
               onClick={() => navigate(`/product/${item.id}`)}

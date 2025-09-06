@@ -18,12 +18,7 @@ export interface Product {
   size: string[];
 }
 
-interface ProductDetailProps {
-  product: Product;
-}
-
-export const ProductDetail: React.FC<ProductDetailProps> = () => {
-  // const [quantity, setQuantity] = useState<number>(1);
+export const ProductDetail: React.FC = () => {
   const {id} = useParams()
   const {data: product} = useGetProductQuery(id)
   const [addToCart] = useAddToCartMutation()

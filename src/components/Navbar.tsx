@@ -8,7 +8,6 @@ import { ProfileCard } from './ProfileCard';
 const Navbar: React.FC = () => {
 
   const location = useLocation()
-  const [isOpen, setIsOpen] = useState(false)
   const [isProfileCardVisible, setIsProfileCardVisible] = useState(false)
   const navigate = useNavigate()
 

@@ -1,8 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetProductsQuery } from "../services/apiSlice";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import { Search } from "lucide-react";
+
+interface MenuItem {
+  name: string;
+  description: string;
+  price: number;
+  rating: number;
+  time: string;
+  id: number;
+  imageId: string;
+	category: string;
+}
 
 const ExploreMenu = () => {
 	const {data, isLoading} = useGetProductsQuery()
@@ -14,7 +25,7 @@ const ExploreMenu = () => {
 		if(data){
 			setFilteredData(data.filter((p) => p.name.toLowerCase().includes(text.toLowerCase())))
 		}
-	}, [text])
+	}, [text, data])
   return (
 		<>
 		<Navbar />
@@ -48,7 +59,9 @@ const ExploreMenu = () => {
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-						{filteredData && filteredData.filter((item)=> item.category === "Brews And Bites").map((item) => (
+						{isLoading ? (
+							<h1>Loading the menu...</h1>
+						) : (filteredData && filteredData.filter((item: MenuItem)=> item.category === "Brews And Bites").map((item: MenuItem) => (
 							<div
 								key={item.id}
 								onClick={() => navigate(`/product/${item.id}`)}
@@ -75,7 +88,7 @@ const ExploreMenu = () => {
 									</div>
 								</div>
 							</div>
-						))}
+						)))}
 
           </div>
         </div>
@@ -86,7 +99,7 @@ const ExploreMenu = () => {
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-						{filteredData && filteredData.filter((item)=> item.category === "Matcha").map((item) => (
+						{filteredData && filteredData.filter((item: MenuItem)=> item.category === "Matcha").map((item: MenuItem) => (
 							<div
 								key={item.id}
 								onClick={() => navigate(`/product/${item.id}`)}
@@ -124,7 +137,7 @@ const ExploreMenu = () => {
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-						{filteredData && filteredData.filter((item)=> item.category === "Combos").map((item) => (
+						{filteredData && filteredData.filter((item: MenuItem)=> item.category === "Combos").map((item: MenuItem) => (
 							<div
 								key={item.id}
 								onClick={() => navigate(`/product/${item.id}`)}

@@ -16,7 +16,6 @@ import { auth } from '../../firebase';
 declare global {
   interface Window {
     recaptchaVerifier?: RecaptchaVerifier;
-    confirmationResult?: any;
   }
 }
 const OTP_LENGTH = 6;
@@ -33,8 +32,7 @@ const Login = () => {
   const [otpArray, setOtpArray] = useState(["", "", "", "", "", ""])
   const {
     isSendingOtp,
-    isVerifyingOtp,
-    isUserLoggedIn
+    isVerifyingOtp
   } = useSelector((state: RootState) => state.auth.login)
 
   const setupRecaptcha = () => {
@@ -43,7 +41,7 @@ const Login = () => {
         auth,
         "recaptcha-container",
         { size: "invisible", // or 'normal'
-          callback: (response) => {
+          callback: (response: string) => {
             console.log("reCAPTCHA solved:", response);
           }
         }
@@ -102,10 +100,8 @@ const Login = () => {
         const user = result.user;
         const idToken = await user.getIdToken();
         await verifyLogin({ otp, idToken }).unwrap();
-        // const userRes = userData
         localStorage.setItem("idToken", idToken);
         navigate("/");
-        // You may want to reset state on successful signup here
       } catch (error) {
         console.error("Error verifying OTP: ", error);
       } finally {
@@ -170,7 +166,7 @@ const Login = () => {
                     inputMode="numeric"
                     maxLength={1}
                     value={digit}
-                    ref={el => otpInputs.current[idx] = el}
+                    ref={el => { otpInputs.current[idx] = el; }}
                     onChange={e => handleOtpChange(e, idx)}
                     onKeyDown={e => handleOtpKeyDown(e, idx)}
                     className="w-10 sm:w-12 h-12 text-center text-2xl rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -5,10 +5,16 @@ import { auth } from '../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { persistor } from '../app/store'
 import { setIsUserLoggedIn } from '../features/auth/signupSlice'
+import type { RootState } from '../app/store'
 
-export const ProfileCard = ({isOpen, toggleProfileCard}) => {
+type ProfileCardProps = {
+  isOpen: boolean;
+  toggleProfileCard: () => void;
+}
 
-  const isUserLoggedIn = useSelector((state) => state.auth.signup.isUserLoggedIn || state.auth.login.isUserLoggedIn)
+export const ProfileCard: React.FC<ProfileCardProps> = ({isOpen, toggleProfileCard}) => {
+
+  const isUserLoggedIn = useSelector((state: RootState) => state.auth.signup.isUserLoggedIn || state.auth.login.isUserLoggedIn)
   const { data: user } = useGetUserQuery(undefined, { skip: !isUserLoggedIn });
   const [logout] = useUserLogoutMutation()
   const dispatch = useDispatch()
@@ -21,8 +27,13 @@ export const ProfileCard = ({isOpen, toggleProfileCard}) => {
       dispatch(setIsUserLoggedIn(false))
       await persistor.purge()
       window.location.href = "/"
-    } catch (error) {
-      console.error("Logout Error:", error.response?.data?.error || error.message);
+    } catch (error: unknown) {
+      if (typeof error === "object" && error !== null) {
+        const err = error as { response?: { data?: { error?: string } }, message?: string };
+        console.error("Logout Error:", err.response?.data?.error || err.message);
+      } else {
+        console.error("Logout Error:", String(error));
+      }
     }
   }
 	return (

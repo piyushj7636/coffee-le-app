@@ -39,7 +39,7 @@ interface MenuItem {
 
 export const productApi = createApi({
   reducerPath: 'productApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api/products' }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/products` }),
   endpoints: (builder) => ({
     getProducts: builder.query<Array<MenuItem>, void>({
       query: () => '/',
@@ -53,7 +53,7 @@ export const productApi = createApi({
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000/api/auth',
+    baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/auth`,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth?.signup?.idToken || localStorage.getItem('idToken');
@@ -121,7 +121,7 @@ export const authApi = createApi({
 export const cartApi = createApi({
   reducerPath: 'cartApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000/api/cart',
+    baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/cart`,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth?.signup?.idToken || localStorage.getItem('idToken');

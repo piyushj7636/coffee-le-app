@@ -81,7 +81,7 @@ export const ProductDetail: React.FC = () => {
 
             {/* Right: Product Details */}
             <div className="flex-1 p-8 flex flex-col">
-              <h1 className="text-4xl font-extrabold text-white mb-3">
+              <h1 className="sm:text-4xl text-2xl font-extrabold text-white mb-3">
                 {product.name}
               </h1>
               <span
@@ -91,7 +91,7 @@ export const ProductDetail: React.FC = () => {
               </span>
 
               {/* Price */}
-              <div className="text-3xl font-bold text-pink-500 mb-6">
+              <div className="sm:text-3xl text-xl font-bold text-pink-500 mb-6">
                 ₹{(product.price/100).toFixed(2)}
               </div>
 
@@ -104,7 +104,7 @@ export const ProductDetail: React.FC = () => {
                   {["Small", "Medium", "Large"].map((option) => (
                     <button
                       key={option}
-                      className={`px-4 py-2 rounded-lg font-medium transition-all border ${
+                      className={`sm:px-4 sm:py-2 px-3 py-2 rounded-lg font-medium transition-all border ${
                         selectedSize === option
                           ? "bg-pink-600 text-white border-pink-600 shadow-lg"
                           : "border-gray-600 text-gray-300 hover:border-pink-500 hover:text-pink-400"
@@ -118,7 +118,7 @@ export const ProductDetail: React.FC = () => {
               </div>
 
               {/* Quantity & Add to Cart */}
-              <div className="flex items-center gap-6 mb-6">
+              <div className="flex sm:items-center flex-wrap gap-6 mb-6">
                 <div>
                   <h3 className="text-lg font-semibold mb-2 text-white">
                     Quantity
@@ -128,9 +128,9 @@ export const ProductDetail: React.FC = () => {
                       className="w-10 h-10 rounded-lg border border-gray-700 text-white hover:border-pink-500 transition"
                       onClick={handleDecreaseQuanity}
                     >
-                      −
+                      -
                     </button>
-                    <span className="text-lg font-semibold text-white">
+                    <span className="sm:text-lg text-md font-semibold text-white">
                       {quantity}
                     </span>
                     <button
@@ -143,7 +143,7 @@ export const ProductDetail: React.FC = () => {
                 </div>
 
                 <button
-                  className="px-6 py-3 rounded-xl shadow-lg font-bold text-lg transition bg-pink-600 hover:bg-pink-700 text-white"
+                  className="sm:px-6 sm:py-3 px-3 py-2 rounded-xl shadow-lg font-bold sm:text-lg text-md transition bg-pink-600 hover:bg-pink-700 text-white"
                   onClick={handleAddToCart}
                 >
                   🛒 Add to Basket
@@ -151,7 +151,7 @@ export const ProductDetail: React.FC = () => {
               </div>
 
               {/* Description */}
-              <div className="text-gray-400 leading-relaxed">
+              <div className="text-gray-400 leading-relaxed sm:text-lg text-sm">
                 {product.description}
               </div>
             </div>

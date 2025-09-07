@@ -37,8 +37,8 @@ const ExploreMenu = () => {
         <span className="text-gray-400">⎯⎯</span>
       </div>
 
-      <div className="w-full max-w-xl">
-        <div className="flex items-center bg-gray-100 rounded-full px-5 py-3 shadow-sm">
+      <div className="sm:w-full w-75 max-w-xl">
+        <div className="flex items-center bg-gray-100 rounded-full px-5 sm:py-3 py-2 shadow-sm">
           <input
             type="text"
             placeholder="Search for your favourite coffee"
@@ -54,11 +54,11 @@ const ExploreMenu = () => {
       <div className="max-w-6xl mx-auto space-y-16">
         
         <div>
-          <h2 className="text-3xl font-bold mb-6 border-b border-gray-700 pb-2">
+          <h2 className="sm:text-3xl text-2xl font-bold mb-6 border-b border-gray-700 pb-2">
             Brews & Bites
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-1 grid-cols-2 md:grid-cols-3 gap-8">
 						{isLoading ? (
 							<h1>Loading the menu...</h1>
 						) : (filteredData && filteredData.filter((item: MenuItem)=> item.category === "Brews And Bites").map((item: MenuItem) => (
@@ -74,15 +74,15 @@ const ExploreMenu = () => {
 									/>
 								</div>
 								<div className="p-5 flex flex-col">
-									<h3 className="text-xl font-semibold mb-2">{item.name}</h3>
+									<h3 className="sm:text-xl font-semibold mb-2">{item.name}</h3>
 									<p className="text-sm text-gray-400 mb-3 line-clamp-2">
 										{item.description}
 									</p>
 									<div className="flex items-center justify-between mt-auto">
-										<span className="text-lg font-bold text-pink-400">
+										<span className="sm:text-lg text font-bold text-pink-400">
 											₹{(item.price/100).toFixed(2)}
 										</span>
-										<button className="px-4 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 font-semibold text-white transition">
+										<button className="sm:px-4 sm:py-2 hidden sm:flex rounded-lg bg-pink-600 hover:bg-pink-700 font-semibold text-white transition">
 											Add
 										</button>
 									</div>
@@ -94,11 +94,11 @@ const ExploreMenu = () => {
         </div>
 
 				<div>
-          <h2 className="text-3xl font-bold mb-6 border-b border-gray-700 pb-2">
+          <h2 className="sm:text-3xl text-2xl font-bold mb-6 border-b border-gray-700 pb-2">
             Matcha
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-1 grid-cols-2 md:grid-cols-3 gap-8">
 						{filteredData && filteredData.filter((item: MenuItem)=> item.category === "Matcha").map((item: MenuItem) => (
 							<div
 								key={item.id}
@@ -112,15 +112,15 @@ const ExploreMenu = () => {
 									/>
 								</div>
 								<div className="p-5 flex flex-col">
-									<h3 className="text-xl font-semibold mb-2">{item.name}</h3>
+									<h3 className="sm:text-xl font-semibold mb-2">{item.name}</h3>
 									<p className="text-sm text-gray-400 mb-3 line-clamp-2">
 										{item.description}
 									</p>
 									<div className="flex items-center justify-between mt-auto">
-										<span className="text-lg font-bold text-pink-400">
+										<span className="sm:text-lg font-bold text-pink-400">
 											₹{(item.price/100).toFixed(2)}
 										</span>
-										<button className="px-4 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 font-semibold text-white transition">
+										<button className="sm:px-4 sm:py-2 hidden sm:flex rounded-lg bg-pink-600 hover:bg-pink-700 font-semibold text-white transition">
 											Add
 										</button>
 									</div>
@@ -132,11 +132,11 @@ const ExploreMenu = () => {
         </div>
 
 				<div>
-          <h2 className="text-3xl font-bold mb-6 border-b border-gray-700 pb-2">
+          <h2 className="sm:text-3xl text-2xl font-bold mb-6 border-b border-gray-700 pb-2">
             Combos
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-1 grid-cols-2 md:grid-cols-3 gap-8">
 						{filteredData && filteredData.filter((item: MenuItem)=> item.category === "Combos").map((item: MenuItem) => (
 							<div
 								key={item.id}
@@ -150,15 +150,15 @@ const ExploreMenu = () => {
 									/>
 								</div>
 								<div className="p-5 flex flex-col">
-									<h3 className="text-xl font-semibold mb-2">{item.name}</h3>
+									<h3 className="sm:text-xl font-semibold mb-2">{item.name}</h3>
 									<p className="text-sm text-gray-400 mb-3 line-clamp-2">
 										{item.description}
 									</p>
 									<div className="flex items-center justify-between mt-auto">
-										<span className="text-lg font-bold text-pink-400">
+										<span className="sm:text-lg font-bold text-pink-400">
 											₹{(item.price/100).toFixed(2)}
 										</span>
-										<button className="px-4 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 font-semibold text-white transition">
+										<button className="sm:px-4 sm:py-2 hidden sm:flex rounded-lg bg-pink-600 hover:bg-pink-700 font-semibold text-white transition">
 											Add
 										</button>
 									</div>

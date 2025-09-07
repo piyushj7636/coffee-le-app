@@ -8,9 +8,9 @@ const Footer: React.FC = () => {
         {/* Visit Section */}
         <div>
           <h4 className="text-pink-400 font-semibold mb-4 text-base">Visit Coffee Le</h4>
-          <p className="text-gray-300">123 Coffee Street, Downtown, City 12345</p>
-          <p className="text-gray-300 mt-1">(555) 123-COFFEE</p>
-          <p className="text-gray-300 mt-1">hello@coffeele.com</p>
+          <p className="text-gray-300">223, Shakti-khand 3, Indirapuram 201014</p>
+          <p className="text-gray-300 mt-1">+91 75035 67636</p>
+          <p className="text-gray-300 mt-1">piyushj7636@gmail.com</p>
         </div>
 
         {/* Hours Section */}

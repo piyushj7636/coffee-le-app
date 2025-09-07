@@ -5,6 +5,8 @@ import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
 import { CartPanel } from './components/CartPanel'
 import ExploreMenu from './components/ExploreMenu'
+import About from './pages/About'
+import { Contact } from './pages/Contact'
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/cart' element={<CartPanel />} />
         <Route path='/menu' element={<ExploreMenu />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/contact' element={<Contact />} />
       </Routes>
     </BrowserRouter>
     </>

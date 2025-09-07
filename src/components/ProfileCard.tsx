@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { persistor } from '../app/store'
 import { setIsUserLoggedIn } from '../features/auth/signupSlice'
 import type { RootState } from '../app/store'
+import { memo } from 'react'
 
 type ProfileCardProps = {
   isOpen: boolean;
@@ -76,4 +77,4 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({isOpen, toggleProfileCa
   ));
 }
 
-export default ProfileCard
+export default memo(ProfileCard)

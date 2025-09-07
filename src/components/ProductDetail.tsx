@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAddToCartMutation, useGetProductQuery } from "../services/apiSlice";
+import { useAddToCartMutation, useGetProductsQuery } from "../services/apiSlice";
 import Navbar from "./Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { setQuantity, setSize } from "../features/auth/cartSlice";
 import type { RootState } from "../app/store";
+// import { ImageShimmer } from "../utils/shimmer/ImageShimmer";
 
 export interface Product {
   id: string;
@@ -19,8 +20,10 @@ export interface Product {
 }
 
 export const ProductDetail: React.FC = () => {
+  const [imageLoaded, setImageLoaded] = useState(false)
   const {id} = useParams()
-  const {data: product} = useGetProductQuery(id)
+  const {data} = useGetProductsQuery()
+  const product = data?.find((p) => String(p.id) === String(id))
   const [addToCart] = useAddToCartMutation()
   const dispatch = useDispatch()
   const {
@@ -54,20 +57,33 @@ export const ProductDetail: React.FC = () => {
           <div className="flex flex-col md:flex-row w-full md:w-5/6 lg:w-4/5 bg-gray-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-800">
             {/* Left: Image */}
             <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 p-6">
+              {!imageLoaded &&
+                <div
+                  className="relative rounded-xl overflow-hidden shadow-lg"
+                  style={{ width: 300, height:380, background: "#e0e0e0" }}
+                >
+                  <div
+                    className="absolute inset-0 bg-gray-300"
+                    style={{
+                      background: "linear-gradient(90deg, #e0e0e0 0%, #f5f5f5 50%, #e0e0e0 100%)",
+                      animation: "shimmer 1.5s infinite linear",
+                      backgroundSize: "200% 100%",
+                    }}
+                  />
+                </div>}
               <img
                 src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_400,h_400,c_fit/${product.imageId}`}
                 alt={product.name}
+                onLoad={() => setImageLoaded(true)}
                 className="rounded-xl shadow-xl max-h-[450px] object-cover transition-transform duration-300 hover:scale-105"
               />
             </div>
 
             {/* Right: Product Details */}
             <div className="flex-1 p-8 flex flex-col">
-              {/* Title */}
               <h1 className="text-4xl font-extrabold text-white mb-3">
                 {product.name}
               </h1>
-
               <span
                 className="px-3 py-1 rounded-full text-xs font-semibold w-fit mb-4 bg-green-900 text-green-300"
               >

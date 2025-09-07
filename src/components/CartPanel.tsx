@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDecreaseItemQuantityMutation, useGetCartQuery, useIncreaseItemQuantityMutation, useRemoveFromCartMutation } from '../services/apiSlice';
 import { Minus, Plus } from "lucide-react";
+import Navbar from './Navbar';
 
 type Product = {
   _id: string;
@@ -44,6 +45,8 @@ export const CartPanel: React.FC = () => {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen bg-gradient-to-br from-gray-950 to-gray-900 text-white px-6 py-12">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
         {/* 🛒 Left: Cart Items */}
@@ -128,5 +131,6 @@ export const CartPanel: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

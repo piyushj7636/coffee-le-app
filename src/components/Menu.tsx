@@ -39,7 +39,7 @@ const Menu = () => {
               className="border border-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition flex justify-between"
             >
               <div>
-                <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
+                <h3 className="sm:text-xl text-md font-semibold mb-2">{item.name}</h3>
                 <div className="flex items-center justify-between text-sm text-gray-400">
                   <span>₹{item.price/100}</span>
                 </div>
